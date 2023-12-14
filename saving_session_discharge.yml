@@ -11,6 +11,7 @@ blueprint:
         entity:
           filter:
           - domain:
+            - binary_sensor
             integration: octopus_energy
           multiple: false
 
