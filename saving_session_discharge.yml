@@ -5,14 +5,25 @@ blueprint:
   author: RobinXe
   input:
     saving_session_event_entity:
-      name: Saving session events
-      description: Your saving session event entity (e.g. event.octopus_energy_{{ACCOUNT_ID}}_octoplus_saving_session_events)
+      name: Saving session
+      description: Your saving session entity (e.g. event.octopus_energy_{{ACCOUNT_ID}}_octoplus_saving_sessions)
       selector:
         entity:
           filter:
           - domain:
             - binary_sensor
             integration: octopus_energy
+          multiple: false
+
+    inverter_device:
+      name: Inverter to discharge
+      description: The SolarEdge inverter to force discharge
+      selector:
+        entity:
+          filter:
+          - domain:
+            - device
+            integration: solaredge_modbus_multi
           multiple: false
 
     inverter_command_mode:
@@ -25,6 +36,17 @@ blueprint:
               - select
               integration: solaredge_modbus_multi
           multiple: false
+
+    discharge_limit:
+      name: Discharge limit
+      description: Set a maximum discharge rate for the battery
+      default: 6000
+      selector:
+        number:
+          min: 0
+          max: 6000
+
+
 
   source_url: https://github.com/RobinXe/homeassistant/saving_session_discharge.yml
 mode: single
