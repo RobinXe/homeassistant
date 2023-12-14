@@ -22,7 +22,7 @@ blueprint:
         entity:
           filter:
           - domain:
-            - device
+            - entities
             integration: solaredge_modbus_multi
           multiple: false
 
