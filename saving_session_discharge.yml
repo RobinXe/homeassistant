@@ -20,8 +20,7 @@ blueprint:
       description: The SolarEdge inverter to force discharge
       selector:
         entity:
-          filter:
-            integration: solaredge_modbus_multi
+          integration: solaredge_modbus_multi
           multiple: false
 
     inverter_command_mode:
