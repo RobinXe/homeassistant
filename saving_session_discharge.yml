@@ -4,7 +4,7 @@ blueprint:
   domain: automation
   author: RobinXe
   input:
-    saving_session_event_entity:
+    saving_session_entity:
       name: Saving session
       description: Your saving session entity (e.g. event.octopus_energy_{{ACCOUNT_ID}}_octoplus_saving_sessions)
       selector:
@@ -34,6 +34,16 @@ blueprint:
               integration: solaredge_modbus_multi
           multiple: false
 
+    inverter_discharge_limit:
+      name: Inverter discharge limit
+      description: The inverter Discharge Limit entity
+      selector:
+        entity:
+          filter:
+            - domain:
+              - number
+              integration: solaredge_modbus_multi
+
     discharge_limit:
       name: Discharge limit
       description: Set a maximum discharge rate for the battery
@@ -43,7 +53,47 @@ blueprint:
           min: 0
           max: 6000
 
-
-
   source_url: https://github.com/RobinXe/homeassistant/saving_session_discharge.yml
 mode: single
+
+variables:
+  saving_session_entity: !input saving_session_entity
+  inverter_device: !input inverter_device
+  inverter_command_mode: !input inverter_command_mode
+  discharge_limit: !input discharge_limit
+
+trigger:
+  - platform: state
+    entity_id:
+      - !input saving_session_entity
+  - platform: state
+    entity_id:
+      - !input inverter_command_mode
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: state
+            entity_id: !input saving_session_entity
+            state: "on"
+        sequence:
+          - service: number.set_value
+            target:
+              entity_id: number.solaredge_i1_storage_discharge_limit
+            data:
+              value: !input discharge_limit
+          - device_id: 574363c72d173f1edb73582f9f89ff50
+            domain: select
+            entity_id: 435fdaff7f38800c80b5db687b76eb5e
+            type: select_option
+            option: Discharge to Maximize Export
+      - conditions:
+          - condition: state
+            entity_id: binary_sensor.octopus_energy_a_87d88ccb_octoplus_saving_sessions
+            state: "off"
+        sequence:
+          - device_id: 574363c72d173f1edb73582f9f89ff50
+            domain: select
+            entity_id: 435fdaff7f38800c80b5db687b76eb5e
+            type: select_option
+            option: Maximize Self Consumption
