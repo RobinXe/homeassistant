@@ -105,10 +105,12 @@ action:
             entity_id: !input inverter_command_mode
             type: select_option
             option: Maximize Self Consumption
+{#
           - service: persistent_notification.create
             data:
               title: Forced Discharge Stopped
               message: >
-                Forced battery discharging has been stopped 
-                at {{ now().strftime('%H:%M') }} 
+                Forced battery discharging has been stopped
+                at {{ now().strftime('%H:%M') }}
                 on {{ now().day }}/{{ now().month }}
+#}
