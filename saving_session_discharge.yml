@@ -19,7 +19,7 @@ blueprint:
       name: Inverter to discharge
       description: The SolarEdge inverter to force discharge
       selector:
-        entity:
+        device:
           integration: solaredge_modbus_multi
           multiple: false
 
