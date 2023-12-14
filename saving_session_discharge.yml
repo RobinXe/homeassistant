@@ -88,6 +88,13 @@ action:
             entity_id: !input inverter_command_mode
             type: select_option
             option: Discharge to Maximize Export
+          - service: persistent_notification.create
+            data:
+              title: Forced Discharge Started
+              message: >
+                Forced battery discharging has been started for Saving Session 
+                at {{ now().strftime('%H:%M') }} 
+                on {{ now().day }}/{{ now().month }}
       - conditions:
           - condition: state
             entity_id: !input saving_session_entity
@@ -98,3 +105,10 @@ action:
             entity_id: !input inverter_command_mode
             type: select_option
             option: Maximize Self Consumption
+          - service: persistent_notification.create
+            data:
+              title: Forced Discharge Started
+              message: >
+                Forced battery discharging has been stopped 
+                at {{ now().strftime('%H:%M') }} 
+                on {{ now().day }}/{{ now().month }}
