@@ -107,7 +107,7 @@ action:
             option: Maximize Self Consumption
           - service: persistent_notification.create
             data:
-              title: Forced Discharge Started
+              title: Forced Discharge Stopped
               message: >
                 Forced battery discharging has been stopped 
                 at {{ now().strftime('%H:%M') }} 
