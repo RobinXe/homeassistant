@@ -59,7 +59,7 @@ blueprint:
       selector:
         number:
           min: 0
-          max: 10000
+          max: 10
 
   source_url: https://github.com/RobinXe/homeassistant/saving_session_discharge.yml
 mode: single
@@ -70,6 +70,7 @@ variables:
   inverter_command_mode: !input inverter_command_mode
   inverter_discharge_limit: !input inverter_discharge_limit
   discharge_limit: !input discharge_limit
+  test_selector: !input test_selector
 
 trigger:
   - platform: state
