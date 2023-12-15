@@ -53,6 +53,13 @@ blueprint:
           min: 0
           max: 10000
 
+    test_selector:
+      name: test selector
+      description: test selector
+      selector:
+        attribute:
+          entity_id: !input 'inverter_command_mode'
+
   source_url: https://github.com/RobinXe/homeassistant/saving_session_discharge.yml
 mode: single
 
