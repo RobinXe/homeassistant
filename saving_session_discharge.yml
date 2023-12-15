@@ -61,7 +61,7 @@ blueprint:
         attribute:
           entity_id: 435fdaff7f38800c80b5db687b76eb5e
 
-  source_url: https://github.com/RobinXe/homeassistant/saving_session_discharge.yml
+  source_url: https://github.com/RobinXe/homeassistant/blob/main/saving_session_discharge.yml
 mode: single
 
 variables:
