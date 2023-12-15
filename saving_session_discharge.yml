@@ -53,19 +53,14 @@ blueprint:
           min: 0
           max: 10000
 
-    app_notifications:
-      name: App notifications
-      description: Should push notifications be sent to companion app(s)
-      selector:
-        boolean:
-
     app_selection:
       name: App selection
       description: Apps to notify
+      default: []
       selector:
         device:
           integration: mobile_app
-          multiple: false
+          multiple: true
 
   source_url: https://github.com/RobinXe/homeassistant/blob/main/saving_session_discharge.yml
 mode: single
@@ -76,7 +71,6 @@ variables:
   inverter_command_mode: !input inverter_command_mode
   inverter_discharge_limit: !input inverter_discharge_limit
   discharge_limit: !input discharge_limit
-  app_notifications: !input app_notifications
   app_selection: !input app_selection
 
 trigger:
@@ -120,6 +114,16 @@ action:
                 Forced battery discharging has been started for Saving Session 
                 at {{ now().strftime('%H:%M') }} 
                 on {{ now().day }}/{{ now().month }}
+          - repeat:
+            for_each: !input app_selection
+            sequence:
+              - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
+                data:
+                  title: Forced Discharge Started
+                  message: >
+                    Forced battery discharging has been started for Saving Session 
+                    at {{ now().strftime('%H:%M') }} 
+                    on {{ now().day }}/{{ now().month }}
       - conditions:
           - condition: and
             conditions:
@@ -142,6 +146,16 @@ action:
                 Forced battery discharging has been stopped 
                 at {{ now().strftime('%H:%M') }} 
                 on {{ now().day }}/{{ now().month }}
+          - repeat:
+            for_each: !input app_selection
+            sequence:
+              - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
+                data:
+                  title: Forced Discharge Stopped
+                  message: >
+                    Forced battery discharging has been stopped 
+                    at {{ now().strftime('%H:%M') }} 
+                    on {{ now().day }}/{{ now().month }}
       - conditions:
           - condition: and
             conditions:
@@ -164,3 +178,13 @@ action:
                 Forced battery discharging has been restarted 
                 at {{ now().strftime('%H:%M') }} 
                 on {{ now().day }}/{{ now().month }}
+          - repeat:
+            for_each: !input app_selection
+            sequence:
+              - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
+                data:
+                  title: Forced Discharge Restarted
+                  message: >
+                    Forced battery discharging has been restarted 
+                    at {{ now().strftime('%H:%M') }} 
+                    on {{ now().day }}/{{ now().month }}
