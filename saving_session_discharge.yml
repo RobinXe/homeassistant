@@ -53,12 +53,11 @@ blueprint:
           min: 0
           max: 10000
 
-    test_selector:
-      name: test selector
-      description: test selector
+    app_notifications:
+      name: App notifications
+      description: Should push notifications be sent to companion app(s)
       selector:
-        attribute:
-          entity_id: 435fdaff7f38800c80b5db687b76eb5e
+        boolean:
 
   source_url: https://github.com/RobinXe/homeassistant/blob/main/saving_session_discharge.yml
 mode: single
@@ -69,7 +68,7 @@ variables:
   inverter_command_mode: !input inverter_command_mode
   inverter_discharge_limit: !input inverter_discharge_limit
   discharge_limit: !input discharge_limit
-  test_selector: !input test_selector
+  app_notifications: !input app_notifications
 
 trigger:
   - platform: state
