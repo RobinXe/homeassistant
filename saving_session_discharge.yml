@@ -56,6 +56,7 @@ blueprint:
     test_selector:
       name: test selector
       description: test selector
+      default: 10
       selector:
         number:
           min: 0
