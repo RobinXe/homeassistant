@@ -81,8 +81,7 @@ action:
           - condition: and
             conditions:
               - condition: state
-                entity_id: >-
-                  !input 'saving_session_entity'
+                entity_id: !input 'saving_session_entity'
                 state: "on"
               - condition: trigger
                 id:
@@ -109,8 +108,7 @@ action:
           - condition: and
             conditions:
               - condition: state
-                entity_id: >-
-                  !input 'saving_session_entity'
+                entity_id: !input 'saving_session_entity'
                 state: "off"
               - condition: trigger
                 id:
@@ -135,8 +133,7 @@ action:
                 id:
                   - "1"
               - condition: state
-                entity_id: >-
-                  !input 'saving_session_entity'
+                entity_id: !input 'saving_session_entity'
                 state: "on"
         sequence:
           - device_id: !input 'inverter_device'
