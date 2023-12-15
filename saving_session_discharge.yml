@@ -65,7 +65,7 @@ blueprint:
       selector:
         device:
           integration: mobile_app
-          multiple: true
+          multiple: false
 
   source_url: https://github.com/RobinXe/homeassistant/blob/main/saving_session_discharge.yml
 mode: single
