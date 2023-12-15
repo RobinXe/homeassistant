@@ -114,16 +114,17 @@ action:
                 Forced battery discharging has been started for Saving Session 
                 at {{ now().strftime('%H:%M') }} 
                 on {{ now().day }}/{{ now().month }}
-          - repeat:
-            for_each: !input app_selection
-            sequence:
-              - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
-                data:
-                  title: Forced Discharge Started
-                  message: >
-                    Forced battery discharging has been started for Saving Session 
-                    at {{ now().strftime('%H:%M') }} 
-                    on {{ now().day }}/{{ now().month }}
+          - alias: Notify devices
+            repeat:
+              for_each: !input app_selection
+              sequence:
+                - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
+                  data:
+                    title: Forced Discharge Started
+                    message: >
+                      Forced battery discharging has been started for Saving Session 
+                      at {{ now().strftime('%H:%M') }} 
+                      on {{ now().day }}/{{ now().month }}
       - conditions:
           - condition: and
             conditions:
@@ -146,16 +147,17 @@ action:
                 Forced battery discharging has been stopped 
                 at {{ now().strftime('%H:%M') }} 
                 on {{ now().day }}/{{ now().month }}
-          - repeat:
-            for_each: !input app_selection
-            sequence:
-              - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
-                data:
-                  title: Forced Discharge Stopped
-                  message: >
-                    Forced battery discharging has been stopped 
-                    at {{ now().strftime('%H:%M') }} 
-                    on {{ now().day }}/{{ now().month }}
+          - alias: Notify devices
+            repeat:
+              for_each: !input app_selection
+              sequence:
+                - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
+                  data:
+                    title: Forced Discharge Stopped
+                    message: >
+                      Forced battery discharging has been stopped 
+                      at {{ now().strftime('%H:%M') }} 
+                      on {{ now().day }}/{{ now().month }}
       - conditions:
           - condition: and
             conditions:
@@ -178,13 +180,14 @@ action:
                 Forced battery discharging has been restarted 
                 at {{ now().strftime('%H:%M') }} 
                 on {{ now().day }}/{{ now().month }}
-          - repeat:
-            for_each: !input app_selection
-            sequence:
-              - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
-                data:
-                  title: Forced Discharge Restarted
-                  message: >
-                    Forced battery discharging has been restarted 
-                    at {{ now().strftime('%H:%M') }} 
-                    on {{ now().day }}/{{ now().month }}
+          - alias: Notify devices
+            repeat:
+              for_each: !input app_selection
+              sequence:
+                - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
+                  data:
+                    title: Forced Discharge Restarted
+                    message: >
+                      Forced battery discharging has been restarted 
+                      at {{ now().strftime('%H:%M') }} 
+                      on {{ now().day }}/{{ now().month }}
