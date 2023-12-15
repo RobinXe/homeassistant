@@ -59,6 +59,12 @@ blueprint:
       selector:
         boolean:
 
+    app_selection:
+      name: App selection
+      description: Apps to notify
+      selector:
+        device:
+
   source_url: https://github.com/RobinXe/homeassistant/blob/main/saving_session_discharge.yml
 mode: single
 
@@ -69,6 +75,7 @@ variables:
   inverter_discharge_limit: !input inverter_discharge_limit
   discharge_limit: !input discharge_limit
   app_notifications: !input app_notifications
+  app_selection: !input app_selection
 
 trigger:
   - platform: state
