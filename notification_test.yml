@@ -21,9 +21,6 @@ blueprint:
 variables:
   notify_time: !input notify_time
   app_selection: !input app_selection
-  service: >-
-    {%- set service='notify.mobile_app_'~(app_selection|replace("device_tracker.","")) -%}
-    {{service}}
 
 trigger:
   platform: time
@@ -32,7 +29,7 @@ trigger:
 condition: []
 
 action:
-  - service: '{{service}}'
+  - service: "notify.mobile_app_{{ device_attr(!input app_selection, 'name') | slugify }}"
     data:
       message: Test
       title: Test
