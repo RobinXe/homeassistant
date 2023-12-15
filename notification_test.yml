@@ -13,10 +13,11 @@ blueprint:
     app_selection:
       name: App selection
       description: Apps to notify
+      default: []
       selector:
         device:
           integration: mobile_app
-          multiple: false
+          multiple: true
 
 variables:
   notify_time: !input notify_time
