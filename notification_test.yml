@@ -22,7 +22,7 @@ variables:
   notify_time: !input notify_time
   app_selection: !input app_selection
   service: >-
-    {%- set service='notify.mobile_app_'~(entity_id|replace("device_tracker.","")) -%}
+    {%- set service='notify.mobile_app_'~(app_selection|replace("device_tracker.","")) -%}
     {{service}}
 
 trigger:
