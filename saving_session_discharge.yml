@@ -55,7 +55,7 @@ blueprint:
 
     app_selection:
       name: App selection
-      description: Apps to notify
+      description: Apps to notify. Leave blank for no push notifications.
       default: []
       selector:
         device:
