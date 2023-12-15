@@ -1,0 +1,39 @@
+blueprint:
+  name: Notification Test
+  description: Testing mobile notification blueprints
+  domain: automation
+  author: RobinXe
+  input:
+    notify_time:
+      name: Time to notify
+      description: Time to notify
+      selector:
+        time:
+
+    app_selection:
+      name: App selection
+      description: Apps to notify
+      selector:
+        device:
+          integration: mobile_app
+          multiple: false
+
+variables:
+  notify_time: !input notify_time
+  app_selection: !input app_selection
+  service: >-
+    {%- set service='notify.mobile_app_'~(entity_id|replace("device_tracker.","")) -%}
+    {{service}}
+
+trigger:
+  platform: time
+  at: !input 'notify_time'
+
+condition: []
+
+action:
+  - service: {{ service }}
+    data:
+      message: Test
+      title: Test
+mode: single
