@@ -167,6 +167,11 @@ action:
               - condition: state
                 entity_id: !input 'saving_session_entity'
                 state: "on"
+              - condition: not
+                conditions:
+                    - condition: state
+                      entity_id: !input 'inverter_command_mode'
+                      state: Discharge to Maximize Export
         sequence:
           - device_id: !input 'inverter_device'
             domain: select
