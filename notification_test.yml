@@ -29,8 +29,12 @@ trigger:
 condition: []
 
 action:
-  - service: "notify.mobile_app_{{ device_attr(!input app_selection, 'name') | slugify }}"
-    data:
-      message: Test
-      title: Test
+  - alias: Send a notification to each device
+    repeat:
+      for_each: !input 'app_selection'
+      sequence:
+        - service: "notify.mobile_app_{{ device_attr(repeat.item, 'name') | slugify }}"
+          data:
+            title: Test Notification
+            message: Hello, multiple device world
 mode: single
