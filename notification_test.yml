@@ -32,7 +32,7 @@ trigger:
 condition: []
 
 action:
-  - service: {{ service }}
+  - service: {{service}}
     data:
       message: Test
       title: Test
