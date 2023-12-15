@@ -17,15 +17,15 @@ blueprint:
 
     inverter_device:
       name: Inverter to discharge
-      description: The SolarEdge inverter to force discharge
+      description: The SolarEdge inverter device to force discharge (e.g. Solaredge I1)
       selector:
         device:
           integration: solaredge_modbus_multi
           multiple: false
 
     inverter_command_mode:
-      name: Inverter storage command mode
-      description: The inverter Storage Command Mode entity, likely "Solaredge I1 Storage Command Mode"
+      name: Inverter storage command mode entity
+      description: The inverter Storage Command Mode entity, (e.g. Solaredge I1 Storage Command Mode)
       selector:
         entity:
           filter:
@@ -35,8 +35,8 @@ blueprint:
           multiple: false
 
     inverter_discharge_limit:
-      name: Inverter storage discharge limit
-      description: The inverter Discharge Limit entity, likely "Solaredge I1 Storage Discharge Limit"
+      name: Inverter storage discharge limit entity
+      description: The inverter Discharge Limit entity, (e.g. Solaredge I1 Storage Discharge Limit)
       selector:
         entity:
           filter:
@@ -51,7 +51,14 @@ blueprint:
       selector:
         number:
           min: 0
-          max: 6000
+          max: 10000
+
+    test_selector:
+      name: Test Selector
+      description: Test Selector
+      selector:
+        entity:
+          domain: integration
 
   source_url: https://github.com/RobinXe/homeassistant/saving_session_discharge.yml
 mode: single
@@ -67,16 +74,26 @@ trigger:
   - platform: state
     entity_id:
       - !input saving_session_entity
+    id: "0"
   - platform: state
     entity_id:
       - !input inverter_command_mode
-condition: []
+    id: "1"
+condition:
+  - condition: template
+    value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
 action:
   - choose:
       - conditions:
-          - condition: state
-            entity_id: !input saving_session_entity
-            state: "on"
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: >-
+                  !input saving_session_entity
+                state: "on"
+              - condition: trigger
+                id:
+                  - "0"
         sequence:
           - service: number.set_value
             target:
@@ -88,37 +105,56 @@ action:
             entity_id: !input inverter_command_mode
             type: select_option
             option: Discharge to Maximize Export
-          - choose:
-            - conditions:
-                - condition: template
-                  value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
-              sequence:
-                - service: persistent_notification.create
-                  data:
-                    title: Forced Discharge Started
-                    message: >
-                      Forced battery discharging has been started for Saving Session 
-                      at {{ now().strftime('%H:%M') }} 
-                      on {{ now().day }}/{{ now().month }}
+          - service: persistent_notification.create
+            data:
+              title: Forced Discharge Started
+              message: >
+                Forced battery discharging has been started for Saving Session 
+                at {{ now().strftime('%H:%M') }} 
+                on {{ now().day }}/{{ now().month }}
       - conditions:
-          - condition: state
-            entity_id: !input saving_session_entity
-            state: "off"
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: >-
+                  !input saving_session_entity
+                state: "off"
+              - condition: trigger
+                id:
+                  - "0"
         sequence:
           - device_id: !input inverter_device
             domain: select
             entity_id: !input inverter_command_mode
             type: select_option
             option: Maximize Self Consumption
-          - choose:
-            - conditions:
-                - condition: template
-                  value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
-              sequence:
-                - service: persistent_notification.create
-                  data:
-                    title: Forced Discharge Stopped
-                    message: >
-                      Forced battery discharging has been stopped 
-                      at {{ now().strftime('%H:%M') }} 
-                      on {{ now().day }}/{{ now().month }}
+          - service: persistent_notification.create
+            data:
+              title: Forced Discharge Stopped
+              message: >
+                Forced battery discharging has been stopped 
+                at {{ now().strftime('%H:%M') }} 
+                on {{ now().day }}/{{ now().month }}
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id:
+                  - "1"
+              - condition: state
+                entity_id: >-
+                  !input saving_session_entity
+                state: "on"
+        sequence:
+          - device_id: !input inverter_device
+            domain: select
+            entity_id: !input inverter_command_mode
+            type: select_option
+            option: Discharge to Maximize Export
+          - service: persistent_notification.create
+            data:
+              title: Forced Discharge Restarted
+              message: >
+                Forced battery discharging has been restarted 
+                at {{ now().strftime('%H:%M') }} 
+                on {{ now().day }}/{{ now().month }}
