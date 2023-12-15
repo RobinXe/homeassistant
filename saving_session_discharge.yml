@@ -66,11 +66,11 @@ variables:
 trigger:
   - platform: state
     entity_id:
-      - !input saving_session_entity
+      - !input 'saving_session_entity'
     id: "0"
   - platform: state
     entity_id:
-      - !input inverter_command_mode
+      - !input 'inverter_command_mode'
     id: "1"
 condition:
   - condition: template
@@ -82,7 +82,7 @@ action:
             conditions:
               - condition: state
                 entity_id: >-
-                  !input saving_session_entity
+                  !input 'saving_session_entity'
                 state: "on"
               - condition: trigger
                 id:
@@ -90,12 +90,12 @@ action:
         sequence:
           - service: number.set_value
             target:
-              entity_id: !input inverter_discharge_limit
+              entity_id: !input 'inverter_discharge_limit'
             data:
-              value: !input discharge_limit
-          - device_id: !input inverter_device
+              value: !input 'discharge_limit'
+          - device_id: !input 'inverter_device'
             domain: select
-            entity_id: !input inverter_command_mode
+            entity_id: !input 'inverter_command_mode'
             type: select_option
             option: Discharge to Maximize Export
           - service: persistent_notification.create
@@ -110,15 +110,15 @@ action:
             conditions:
               - condition: state
                 entity_id: >-
-                  !input saving_session_entity
+                  !input 'saving_session_entity'
                 state: "off"
               - condition: trigger
                 id:
                   - "0"
         sequence:
-          - device_id: !input inverter_device
+          - device_id: !input 'inverter_device'
             domain: select
-            entity_id: !input inverter_command_mode
+            entity_id: !input 'inverter_command_mode'
             type: select_option
             option: Maximize Self Consumption
           - service: persistent_notification.create
@@ -136,12 +136,12 @@ action:
                   - "1"
               - condition: state
                 entity_id: >-
-                  !input saving_session_entity
+                  !input 'saving_session_entity'
                 state: "on"
         sequence:
-          - device_id: !input inverter_device
+          - device_id: !input 'inverter_device'
             domain: select
-            entity_id: !input inverter_command_mode
+            entity_id: !input 'inverter_command_mode'
             type: select_option
             option: Discharge to Maximize Export
           - service: persistent_notification.create
