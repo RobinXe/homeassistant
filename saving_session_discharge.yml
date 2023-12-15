@@ -53,13 +53,6 @@ blueprint:
           min: 0
           max: 10000
 
-    test_selector:
-      name: Test Selector
-      description: Test Selector
-      selector:
-        entity:
-          domain: integration
-
   source_url: https://github.com/RobinXe/homeassistant/saving_session_discharge.yml
 mode: single
 
