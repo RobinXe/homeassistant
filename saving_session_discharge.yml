@@ -62,6 +62,17 @@ blueprint:
           integration: mobile_app
           multiple: true
 
+    other_automations:
+      name: Other automations
+      description: Any other automations that can control the battery. These will be disabled at the start of the session, and re-enabled afterwards.
+      default: []
+      selector:
+        entity:
+          filter:
+            - domain:
+              - automation
+          multiple: true
+
   source_url: https://github.com/RobinXe/homeassistant/blob/main/saving_session_discharge.yml
 mode: single
 
@@ -72,6 +83,7 @@ variables:
   inverter_discharge_limit: !input inverter_discharge_limit
   discharge_limit: !input discharge_limit
   app_selection: !input app_selection
+  other_automations: !input other_automations
 
 trigger:
   - platform: state
@@ -97,6 +109,15 @@ action:
                 id:
                   - "0"
         sequence:
+          - alias: Disable other automations
+            repeat:
+              for_each: !input other_automations
+              sequence:
+                - service: automation.turn_off
+                  target:
+                    entity_id: "{{ repeat.item }}"
+                  data:
+                    stop_actions: true
           - service: number.set_value
             target:
               entity_id: !input 'inverter_discharge_limit'
@@ -158,6 +179,14 @@ action:
                       Forced battery discharging has been stopped 
                       at {{ now().strftime('%H:%M') }} 
                       on {{ now().day }}/{{ now().month }}
+          - alias: Enable other automations
+            repeat:
+              for_each: !input other_automations
+              sequence:
+                - service: automation.turn_on
+                  target:
+                    entity_id: "{{ repeat.item }}"
+                  data: {}
       - conditions:
           - condition: and
             conditions:
